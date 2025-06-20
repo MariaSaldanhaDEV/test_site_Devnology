@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Carrinho from "./pages/Carrinho";
+import Carrinho from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 
 function App() {
