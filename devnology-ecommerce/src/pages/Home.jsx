@@ -1,5 +1,18 @@
 import { useEffect, useState } from 'react';
-import ProductFilters from '../components/ProductFilters';  // caminho correto
+import ProductFilters from '../components/ProductFilters';
+import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
+
+function Header() {
+  return (
+    <header style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+      <h2>Devnology E-commerce</h2>
+      <Link to="/cart">
+        🛒 Ir para o Carrinho
+      </Link>
+    </header>
+  );
+}
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
@@ -7,14 +20,25 @@ export default function Home() {
   const [filtroNome, setFiltroNome] = useState('');
   const [filtroPais, setFiltroPais] = useState('todos');
 
+  const { addToCart } = useCart();
+
   useEffect(() => {
     const buscarProdutos = async () => {
       try {
         const respostaBr = await fetch("http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/brazilian_provider");
         const respostaEu = await fetch("http://616d6bdb6dacbb001794ca17.mockapi.io/devnology/european_provider");
 
-        const produtosBr = (await respostaBr.json()).map(p => ({ ...p, source: 'br' }));
-        const produtosEu = (await respostaEu.json()).map(p => ({ ...p, source: 'eu' }));
+        const produtosBr = (await respostaBr.json()).map(p => ({
+          ...p,
+          source: 'br',
+          uniqueId: `br-${p.id}`
+        }));
+
+        const produtosEu = (await respostaEu.json()).map(p => ({
+          ...p,
+          source: 'eu',
+          uniqueId: `eu-${p.id}`
+        }));
 
         const todosProdutos = [...produtosBr, ...produtosEu];
         setProdutos(todosProdutos);
@@ -38,7 +62,6 @@ export default function Home() {
     <div style={{ padding: "1rem" }}>
       <h1>Produtos disponíveis</h1>
 
-      {/* Usa o componente separado para filtros */}
       <ProductFilters
         filtroNome={filtroNome}
         setFiltroNome={setFiltroNome}
@@ -51,7 +74,7 @@ export default function Home() {
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
           {produtosFiltrados.map(produto => (
-            <div key={produto.id} style={{
+            <div key={produto.uniqueId} style={{
               border: "1px solid #ccc",
               borderRadius: "8px",
               padding: "1rem",
@@ -67,7 +90,9 @@ export default function Home() {
               <p style={{ fontSize: '0.8rem', color: '#666' }}>
                 Origem: {produto.source === 'br' ? 'Brasil' : 'Europa'}
               </p>
-              <button>Adicionar ao Carrinho</button>
+              <button onClick={() => addToCart(produto)}>
+                Adicionar ao Carrinho
+              </button>
             </div>
           ))}
         </div>

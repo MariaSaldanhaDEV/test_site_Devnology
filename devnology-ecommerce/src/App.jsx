@@ -2,15 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
+     <Navbar /> { }
       <Routes>
         <Route path="/" element={<Home />} />
-          <Link to="/cart" style={{ margin: "1rem", display: "inline-block" }}>
-            Ir para o Carrinho
-          </Link>
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
