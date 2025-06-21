@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Carrinho from "./pages/Cart";
+import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 
 function App() {
@@ -8,7 +8,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/carrinho" element={<Carrinho />} />
+          <Link to="/cart" style={{ margin: "1rem", display: "inline-block" }}>
+            Ir para o Carrinho
+          </Link>
+        <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </BrowserRouter>
